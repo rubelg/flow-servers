@@ -1,0 +1,67 @@
+---
+- name: Remove previous build files
+  connection: local
+  hosts: all
+  strategy: free
+  gather_facts: no
+  tasks:
+
+
+  - name: set default directory
+    set_fact:
+         outdir: "files"
+
+  - name: override default directory
+    set_fact:
+         outdir: "{{outputdirectory}}"
+    when: outputdirectory is defined
+
+  - file: path={{outdir}}/{{inventory_hostname}} state=absent
+  - file: path="{{outdir}}/{{inventory_hostname}}" state=directory
+
+- name: Generate BGP Flow config
+  connection: local
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  
+  - name: Add policy
+    template: 
+      src: flow-policy.j2
+      dest: "{{outdir}}/{{inventory_hostname}}/policy"
+
+  - name: Add interface config
+    template:
+      src: flow-interfaces.j2
+      dest: "{{outdir}}/{{inventory_hostname}}/interface"
+
+  - name: Build BGP Config
+    template:
+      src: flow-bgp.j2
+      dest: "{{outdir}}/{{inventory_hostname}}/zzbgp"
+
+- name: Build Full config
+  connection: local
+  hosts: all
+  gather_facts: no
+  tasks:
+
+  - name: gather files to strip empty lines
+    find:
+       paths: "{{outdir}}/{{inventory_hostname}}/"
+       recurse: no
+    register: filelist
+    no_log: True
+
+  - lineinfile:
+       path: "{{item.path }}"
+       state: absent
+       regexp: '^$'
+    with_items: "{{filelist.files}}"
+    no_log: True
+
+  - name: Read files
+    assemble:
+       src: "{{outdir}}/{{inventory_hostname}}/"
+       dest: "{{outdir}}/{{inventory_hostname}}/{{inventory_hostname}}-full-config"

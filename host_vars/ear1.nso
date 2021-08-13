@@ -1,0 +1,22 @@
+---
+hostname: ear1.nso
+os: sros
+
+ports:
+  - port: 3/1/1
+    des: Flow Enrichment server phy port
+
+  - port: xe-3/1/1
+    phyport: 3/1/1
+    unit:
+    - number: 0
+      logicaldes: Flow Enrichment Interface
+      ipv4addr:  100.1.1.2/30
+      mtu: 1500
+
+bgp:
+  - peer: 100.1.1.1
+    group: flow-enrichment
+    peeras: 10753
+    description: BGP Flow Enrichment Server
+    hash: mypassword

@@ -1,0 +1,40 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+
+{% if os == "sros" %}
+
+ {% if ports is defined %}
+   
+   {% for p in ports %} 
+     {% if (p.lagid is defined) %}
+/configure port {{ p.port }} shutdown
+/configure port {{ p.port }} description "{{ p.des }}"
+/configure port {{ p.port }} ethernet mode {{ p.mode }}
+/configure port {{ p.port }} ethernet encap-type {{ p.encap }}
+/configure port {{ p.port }} no shutdown
+     {%- endif %}
+     {% if p.lagid is defined %}
+/configure lag {{ p.lagid }} mode access
+/configure lag {{ p.lagid }} encap-type dot1q
+/configure lag {{ p.lagid }} port {{ p.port }}
+     {%- endif %}
+     {% if p.lagint is defined %}
+/configure lag {{ p.lagint }} description "{{ p.des }}"
+/configure lag {{ p.lagint }} lacp active 
+/configure lag {{ p.lagint }} no shutdown
+     {%- endif %} 
+     {% if p.unit is defined %}
+       {% for u in p.unit  %}
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" create
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" address {{ u.ipv4addr }}
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" description "{{ u.logicaldes }}"
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" enable-ingress-stats
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" sap lag-{{u.lagid}}:{{u.number}} create
+/configure service ies 3356 interface "{{ p.port }}.{{ u.number }}" no shutdown
+  
+
+       {% endfor %}
+     {% endif %}
+
+    {% endfor %}
+  {% endif %}
+{% endif %}

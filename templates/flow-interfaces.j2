@@ -1,0 +1,29 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+
+{% if os == "sros" %}
+
+ {% if ports is defined %}
+   
+   {% for p in ports %} 
+     {% if p.unit is not defined %}
+/configure port {{ p.port }} shutdown
+/configure port {{ p.port }} description "{{ p.des }}"
+/configure port {{ p.port }} ethernet mode access
+/configure port {{ p.port }} no shutdown
+     {% endif %}
+     {% if p.unit is defined %}
+       {% for u in p.unit  %}
+/configure service ies 3356 interface "{{ p.port }}" create
+/configure service ies 3356 interface "{{ p.port }}" address {{ u.ipv4addr }}
+/configure service ies 3356 interface "{{ p.port }}" description "{{ u.logicaldes }}"
+/configure service ies 3356 interface "{{ p.port }}" enable-ingress-stats
+/configure service ies 3356 interface "{{ p.port }}" sap {{p.phyport}}:{{u.number}} create
+/configure service ies 3356 interface "{{ p.port }}" no shutdown
+  
+
+       {% endfor %}
+     {% endif %}
+
+    {% endfor %}
+  {% endif %}
+{% endif %}
