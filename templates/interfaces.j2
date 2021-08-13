@@ -10,6 +10,7 @@
 /configure port {{ p.port }} description "{{ p.des }}"
 /configure port {{ p.port }} ethernet mode {{ p.mode }}
 /configure port {{ p.port }} ethernet encap-type {{ p.encap }}
+/configure port {{ p.port }} ethernet mtu {{ p.mtu }}
 /configure port {{ p.port }} no shutdown
      {%- endif %}
      {% if p.lagid is defined %}

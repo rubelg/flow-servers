@@ -4,19 +4,19 @@ os: sros
 
 ports:
   - port: 3/1/1
-    des: Flow Enrichment server phy port
+    des: 10GE Attached Flow Server blah.lumen.com
+    mtu: 1500
 
   - port: xe-3/1/1
     phyport: 3/1/1
     unit:
     - number: 0
-      logicaldes: Flow Enrichment Interface
+      logicaldes: Directly Attached Flow Collectors
       ipv4addr:  100.1.1.2/30
-      mtu: 1500
 
 bgp:
   - peer: 100.1.1.1
-    group: flow-enrichment
+    group: flow-servers
     peeras: 10753
-    description: BGP Flow Enrichment Server
+    description: BGP 10GE Directly Attached Flow Collectors
     hash: mypassword
