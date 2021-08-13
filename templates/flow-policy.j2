@@ -13,7 +13,9 @@
 /configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.30.0/23 longer
 /configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.32.0/22 longer
 /configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.36.0/24 longer
-     
+ 
+/configure router policy-options policy-statement "bgp-{{ b.group }}"
+/configure router policy-options policy-statement "bgp-{{ b.group }}" description "Directly Attached Flow Server Import Policy"
 /configure router policy-options policy-statement "bgp-{{ b.group }}" entry 5 from prefix-list "bgp-{{ b.group }}"
 /configure router policy-options policy-statement "bgp-{{ b.group }}" entry 5 action next-policy
 /configure router policy-options policy-statement "bgp-{{ b.group }}" entry 15 action drop
