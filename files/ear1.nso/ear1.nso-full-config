@@ -1,0 +1,37 @@
+   
+ 
+/configure port 3/1/1 shutdown
+/configure port 3/1/1 description "10GE Attached Flow Server blah.lumen.com"
+/configure port 3/1/1 ethernet mode access
+/configure port 3/1/1 ethernet mtu 1500
+/configure port 3/1/1 no shutdown
+ 
+/configure service ies 3356 interface "xe-3/1/1" create
+/configure service ies 3356 interface "xe-3/1/1" address 100.1.1.2/30
+/configure service ies 3356 interface "xe-3/1/1" description "Directly Attached Flow Collectors"
+/configure service ies 3356 interface "xe-3/1/1" enable-ingress-stats
+/configure service ies 3356 interface "xe-3/1/1" sap 3/1/1:0 create
+/configure service ies 3356 interface "xe-3/1/1" no shutdown
+  
+/configure router policy-options begin
+/configure router policy-options prefix-list "bgp-flow-servers" prefix 4.68.14.0/23 longer
+/configure router policy-options prefix-list "bgp-flow-servers" prefix 4.68.30.0/23 longer
+/configure router policy-options prefix-list "bgp-flow-servers" prefix 4.68.32.0/22 longer
+/configure router policy-options prefix-list "bgp-flow-servers" prefix 4.68.36.0/24 longer
+     
+/configure router policy-options policy-statement "bgp-flow-servers" entry 5 from prefix-list "bgp-flow-servers"
+/configure router policy-options policy-statement "bgp-flow-servers" entry 5 action next-policy
+/configure router policy-options policy-statement "bgp-flow-servers" entry 15 action drop
+/configure router policy-options commit
+    
+/configure router bgp group "flow-servers" error-handling update-fault-tolerance
+/configure router bgp group "flow-servers" prefix-limit ipv4 1000 post-import
+/configure router bgp group "flow-servers" type external
+/configure router bgp group "flow-servers" remove-private
+/configure router bgp group "flow-servers" enable-origin-validation ipv4
+/configure router bgp group "flow-servers" peer-as 10753 
+/configure router bgp group "flow-servers" family ipv4
+/configure router bgp group "flow-servers" import "bgp-flow-servers" "customer"
+/configure router bgp group "flow-servers" export "send-default" "none"
+/configure router bgp group "flow-servers" neighbor 100.1.1.1 description "BGP 10GE Directly Attached Flow Collectors"
+/configure router bgp group "flow-servers" neighbor 100.1.1.1 authentication-key mypassword

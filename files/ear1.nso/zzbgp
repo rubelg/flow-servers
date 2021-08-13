@@ -1,0 +1,12 @@
+    
+/configure router bgp group "flow-servers" error-handling update-fault-tolerance
+/configure router bgp group "flow-servers" prefix-limit ipv4 1000 post-import
+/configure router bgp group "flow-servers" type external
+/configure router bgp group "flow-servers" remove-private
+/configure router bgp group "flow-servers" enable-origin-validation ipv4
+/configure router bgp group "flow-servers" peer-as 10753 
+/configure router bgp group "flow-servers" family ipv4
+/configure router bgp group "flow-servers" import "bgp-flow-servers" "customer"
+/configure router bgp group "flow-servers" export "send-default" "none"
+/configure router bgp group "flow-servers" neighbor 100.1.1.1 description "BGP 10GE Directly Attached Flow Collectors"
+/configure router bgp group "flow-servers" neighbor 100.1.1.1 authentication-key mypassword
