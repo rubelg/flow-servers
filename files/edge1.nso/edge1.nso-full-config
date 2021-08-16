@@ -1,0 +1,26 @@
+set interfaces xe-0/1/3 description "10GE Attached Flow Server Blah.lumen.com"
+set interfaces xe-0/1/3 mtu 1518
+set interfaces xe-0/1/3 unit 0 description "Directly Attached Flow Collectors"
+set interfaces xe-0/1/3 unit 0 family inet address 100.1.1.2/30
+ 
+set policy-options prefix-list bgp-flow-servers 4.68.14.0/23
+set policy-options prefix-list bgp-flow-servers 4.68.30.0/23
+set policy-options prefix-list bgp-flow-servers 4.68.32.0/22
+set policy-options prefix-list bgp-flow-servers 4.68.36.0/24
+set policy-options policy-statement bgp-flow-servers term flow-servers from prefix-list bgp-flow-servers
+set policy-options policy-statement bgp-flow-servers term flow-servers then accept
+set policy-options policy-statement bgp-flow-servers term reject then reject
+ 
+set protocols bgp group flow-servers type external
+set protocols bgp group flow-servers description "Directly Attached 10GE Flow Servers"
+set protocols bgp group flow-servers remove-private
+set protocols bgp group flow-servers peer-as 10753
+set protocols bgp group flow-servers family inet any
+set protocols bgp group flow-servers family inet any prefix-limit maximum 1000
+set protocols bgp group flow-servers import bgp-flow-servers
+set protocols bgp group flow-servers import customer
+set protocols bgp group flow-servers export send-default
+set protocols bgp group flow-servers export none
+set protocols bgp group flow-servers neighbor 100.1.1.1 description "10GE Flow Collector - Blah.lumen.com"
+set protocols bgp group flow-servers neighbor 100.1.1.1 authentication-key mypassword
+ 

@@ -3,6 +3,7 @@
 /configure port 3/1/1 shutdown
 /configure port 3/1/1 description "10GE Attached Flow Server blah.lumen.com"
 /configure port 3/1/1 ethernet mode access
+/configure port 3/1/1 ethernet encap-type null
 /configure port 3/1/1 ethernet mtu 1500
 /configure port 3/1/1 no shutdown
  
@@ -27,6 +28,7 @@
 /configure router policy-options commit
     
 /configure router bgp group "flow-servers" error-handling update-fault-tolerance
+/configure router bgp group "flow-servers" description "Directly Attached 10GE Flow Servers"
 /configure router bgp group "flow-servers" prefix-limit ipv4 1000 post-import
 /configure router bgp group "flow-servers" type external
 /configure router bgp group "flow-servers" remove-private
@@ -35,5 +37,6 @@
 /configure router bgp group "flow-servers" family ipv4
 /configure router bgp group "flow-servers" import "bgp-flow-servers" "customer"
 /configure router bgp group "flow-servers" export "send-default" "none"
-/configure router bgp group "flow-servers" neighbor 100.1.1.1 description "BGP 10GE Directly Attached Flow Collectors"
+/configure router bgp group "flow-servers" neighbor 100.1.1.1 description "10GE Flow Collector - blah.lumen.com"
 /configure router bgp group "flow-servers" neighbor 100.1.1.1 authentication-key mypassword
+ 

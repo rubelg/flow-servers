@@ -1,0 +1,13 @@
+set protocols bgp group flow-servers type external
+set protocols bgp group flow-servers description "Directly Attached 10GE Flow Servers"
+set protocols bgp group flow-servers remove-private
+set protocols bgp group flow-servers peer-as 10753
+set protocols bgp group flow-servers family inet any
+set protocols bgp group flow-servers family inet any prefix-limit maximum 1000
+set protocols bgp group flow-servers import bgp-flow-servers
+set protocols bgp group flow-servers import customer
+set protocols bgp group flow-servers export send-default
+set protocols bgp group flow-servers export none
+set protocols bgp group flow-servers neighbor 100.1.1.1 description "10GE Flow Collector - Blah.lumen.com"
+set protocols bgp group flow-servers neighbor 100.1.1.1 authentication-key mypassword
+ 

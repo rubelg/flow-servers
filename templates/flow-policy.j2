@@ -25,3 +25,18 @@
    {% endfor %}
  {% endif %}
 {% endif %}
+
+{% if os == "junos" %}
+  {% if bgp is defined %}
+    {% for b in bgp %}
+set policy-options prefix-list bgp-{{ b.group }} 4.68.14.0/23
+set policy-options prefix-list bgp-{{ b.group }} 4.68.30.0/23
+set policy-options prefix-list bgp-{{ b.group }} 4.68.32.0/22
+set policy-options prefix-list bgp-{{ b.group }} 4.68.36.0/24
+set policy-options policy-statement bgp-{{ b.group }} term flow-servers from prefix-list bgp-{{ b.group }}
+set policy-options policy-statement bgp-{{ b.group }} term flow-servers then accept
+set policy-options policy-statement bgp-{{ b.group }} term reject then reject
+ 
+   {% endfor %}
+ {% endif %}
+{% endif %}

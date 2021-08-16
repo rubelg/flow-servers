@@ -1,0 +1,8 @@
+set policy-options prefix-list bgp-flow-servers 4.68.14.0/23
+set policy-options prefix-list bgp-flow-servers 4.68.30.0/23
+set policy-options prefix-list bgp-flow-servers 4.68.32.0/22
+set policy-options prefix-list bgp-flow-servers 4.68.36.0/24
+set policy-options policy-statement bgp-flow-servers term flow-servers from prefix-list bgp-flow-servers
+set policy-options policy-statement bgp-flow-servers term flow-servers then accept
+set policy-options policy-statement bgp-flow-servers term reject then reject
+ 

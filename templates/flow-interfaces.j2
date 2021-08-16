@@ -9,6 +9,7 @@
 /configure port {{ p.port }} shutdown
 /configure port {{ p.port }} description "{{ p.des }}"
 /configure port {{ p.port }} ethernet mode access
+/configure port {{ p.port }} ethernet encap-type null
 /configure port {{ p.port }} ethernet mtu {{ p.mtu }}
 /configure port {{ p.port }} no shutdown
      {% endif %}
@@ -25,6 +26,21 @@
        {% endfor %}
      {% endif %}
 
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
+{% if os == "junos" %}
+  {% if ports is defined %}
+    {% for p in ports %}
+      {% if p.unit is defined %}
+        {% for u in p.unit %}
+set interfaces {{ p.port }} description "{{ p.des }}"
+set interfaces {{ p.port }} mtu {{ p.phymtu }}
+set interfaces {{ p.port }} unit 0 description "{{ u.logicaldes }}"
+set interfaces {{ p.port }} unit 0 family inet address {{ u.ipv4addr }}
+        {% endfor %}
+      {% endif %} 
     {% endfor %}
   {% endif %}
 {% endif %}

@@ -3,6 +3,7 @@
 /configure port 3/1/1 shutdown
 /configure port 3/1/1 description "10GE Attached Flow Server blah.lumen.com"
 /configure port 3/1/1 ethernet mode access
+/configure port 3/1/1 ethernet encap-type null
 /configure port 3/1/1 ethernet mtu 1500
 /configure port 3/1/1 no shutdown
  
