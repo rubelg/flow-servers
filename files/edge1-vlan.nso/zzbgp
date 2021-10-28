@@ -9,5 +9,5 @@ set protocols bgp group netflow-collectors import customer
 set protocols bgp group netflow-collectors import bb2
 set protocols bgp group netflow-collectors export send-default
 set protocols bgp group netflow-collectors export none
-set protocols bgp group netflow-collectors neighbor 100.1.1.1 description "Netflow Collector - Blah.lumen.com"
+set protocols bgp group netflow-collectors neighbor 100.1.1.1 description "Netlow Collector - Blah.lumen.com"
  

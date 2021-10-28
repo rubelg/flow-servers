@@ -1,0 +1,4 @@
+set interfaces ae10 unit 12 description "MGD Attached Netflow Collectors"
+set interfaces ae10 unit 12 family inet address 100.1.1.2/30
+set interfaces ae10 unit 12 vlan-id 12
+      

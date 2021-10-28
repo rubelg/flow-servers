@@ -5,7 +5,7 @@
  {% if ports is defined %}
    
    {% for p in ports %} 
-     {% if (p.unit is not defined) and (p.lagid is not defined) %}
+     {% if p.unit is not defined %}
 /configure port {{ p.port }} shutdown
 /configure port {{ p.port }} description "{{ p.des }}"
 /configure port {{ p.port }} ethernet mode access
@@ -15,33 +15,22 @@
        {% endif %}
 /configure port {{ p.port }} no shutdown
      {% endif %}
-     {% if (p.unit is defined) and (p.lagid is not defined) %}
+     {% if p.unit is defined %}
        {% for u in p.unit  %}
+         {% if u.vlanid is not defined %}
 /configure service ies 3356 interface "{{ p.port }}" create
 /configure service ies 3356 interface "{{ p.port }}" address {{ u.ipv4addr }}
 /configure service ies 3356 interface "{{ p.port }}" description "{{ u.logicaldes }}"
 /configure service ies 3356 interface "{{ p.port }}" enable-ingress-stats
 /configure service ies 3356 interface "{{ p.port }}" sap {{p.phyport}}:{{u.number}} create
 /configure service ies 3356 interface "{{ p.port }}" no shutdown
+         {% endif %}
        {% endfor %}
      {% endif %}
-     {% if p.ae is defined %}
-        {% for a in p.ae %}
-/configure router interface "{{p.port}}.{{a.number}}" create
-/configure router interface "{{p.port}}.{{a.number}}" address {{ a.ipv4addr }}
-/configure router interface "{{p.port}}.{{a.number}}" description "{{ a.logicaldes }}"
-/configure router interface "{{p.port}}.{{a.number}}" enable-ingress-stats
-/configure router interface "{{p.port}}.{{a.number}}" port lag-{{ p.lagid }}:{{ a.number}}
-/configure router interface "{{p.port}}.{{a.number}}" ingress filter ip 1
-/configure router interface "{{p.port}}.{{a.number}}" no shut
-        {% endfor %}
-     {% endif %}
-   {% endfor %}
- {% endif %}
-exit all
 
+    {% endfor %}
+  {% endif %}
 {% endif %}
-
 
 {% if os == "junos" %}
   {% if ports is defined %}

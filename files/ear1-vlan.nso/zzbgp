@@ -9,6 +9,6 @@
 /configure router bgp group "netflow-collectors" family ipv4
 /configure router bgp group "netflow-collectors" import "peer-netflow" "customer"
 /configure router bgp group "netflow-collectors" export "send-default" "none"
-/configure router bgp group "netflow-collectors" neighbor 100.1.1.1 description "NetFlow Collector - hostname"
+/configure router bgp group "netflow-collectors" neighbor 100.1.1.1 description "Netflow Collector - blah.lumen.com"
  
 exit all

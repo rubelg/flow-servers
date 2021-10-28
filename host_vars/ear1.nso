@@ -4,19 +4,17 @@ os: sros
 
 ports:
   - port: 3/1/1
-    des: 10GE Attached Flow Server blah.lumen.com
-    mtu: 1500
+    des: Planning Provided
 
   - port: xe-3/1/1
     phyport: 3/1/1
     unit:
     - number: 0
-      logicaldes: Directly Attached Flow Collectors
+      logicaldes: NetFlow Collectors
       ipv4addr:  100.1.1.2/30
 
 bgp:
   - peer: 100.1.1.1
-    group: flow-servers
+    group: netflow-collectors
     peeras: 10753
-    description: 10GE Flow Collector - blah.lumen.com
-    hash: mypassword
+    description: NetFlow Collector - hostname

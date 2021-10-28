@@ -1,0 +1,17 @@
+---
+hostname: edge1.nso
+os: junos
+
+ports:
+  - port: ae10
+    unit:
+    - number: 12
+      logicaldes: MGD Attached Netflow Collectors
+      ipv4addr:  100.1.1.2/30
+      vlanid: 12
+
+bgp:
+  - peer: 100.1.1.1
+    group: netflow-collectors
+    peeras: 10753
+    description: Netlow Collector - Blah.lumen.com

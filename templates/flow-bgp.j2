@@ -7,38 +7,37 @@
     {% for b in bgp %}
     
 /configure router bgp group "{{ b.group }}" error-handling update-fault-tolerance
-/configure router bgp group "{{ b.group }}" description "Directly Attached 10GE Flow Servers"
+/configure router bgp group "{{ b.group }}" description "Neflow Collectors"
 /configure router bgp group "{{ b.group }}" prefix-limit ipv4 1000 post-import
 /configure router bgp group "{{ b.group }}" type external
 /configure router bgp group "{{ b.group }}" remove-private
 /configure router bgp group "{{ b.group }}" enable-origin-validation ipv4
 /configure router bgp group "{{ b.group }}" peer-as {{ b.peeras }} 
 /configure router bgp group "{{ b.group }}" family ipv4
-/configure router bgp group "{{ b.group }}" import "bgp-{{ b.group }}" "customer"
+/configure router bgp group "{{ b.group }}" import "peer-netflow" "customer"
 /configure router bgp group "{{ b.group }}" export "send-default" "none"
 /configure router bgp group "{{ b.group }}" neighbor {{ b.peer }} description "{{ b.description }}"
-/configure router bgp group "{{ b.group }}" neighbor {{ b.peer }} authentication-key {{ b.hash }}
  
     {% endfor %}
   {% endif %}
-
+exit all
   {% endif %}
 
 {% if os == "junos" %}
   {% if bgp is defined %}
     {% for b in bgp %}
 set protocols bgp group {{ b.group }} type external
-set protocols bgp group {{ b.group }} description "Directly Attached 10GE Flow Servers"
+set protocols bgp group {{ b.group }} description "Netflow Collectors"
 set protocols bgp group {{ b.group }} remove-private
 set protocols bgp group {{ b.group }} peer-as {{ b.peeras }}
 set protocols bgp group {{ b.group }} family inet any
 set protocols bgp group {{ b.group }} family inet any prefix-limit maximum 1000
-set protocols bgp group {{ b.group }} import bgp-{{ b.group }}
+set protocols bgp group {{ b.group }} import peer-netflow
 set protocols bgp group {{ b.group }} import customer
+set protocols bgp group {{ b.group }} import bb2
 set protocols bgp group {{ b.group }} export send-default
 set protocols bgp group {{ b.group }} export none
 set protocols bgp group {{ b.group }} neighbor {{ b.peer }} description "{{ b.description }}"
-set protocols bgp group {{ b.group }} neighbor {{ b.peer }} authentication-key {{ b.hash }}
  
     {% endfor %}
   {% endif %}

@@ -1,0 +1,18 @@
+---
+hostname: ear1-vlan.nso
+os: sros
+
+ports:
+  - port: ae7
+    phyport: 3/1/1
+    lagid: 7
+    ae:
+    - number: 11
+      logicaldes: MGD NetFlow Collectors
+      ipv4addr:  100.1.1.2/30
+
+bgp:
+  - peer: 100.1.1.1
+    group: netflow-collectors
+    peeras: 10753
+    description: Netflow Collector - blah.lumen.com

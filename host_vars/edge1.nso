@@ -5,16 +5,14 @@ os: junos
 ports:
   - port: xe-0/1/3
     phyport: 0/1/3
-    phymtu: 1518
-    des: 10GE Attached Flow Server Blah.lumen.com
+    des: Planning Provided
     unit:
     - number: 0
-      logicaldes: Directly Attached Flow Collectors
+      logicaldes: NetFlow Collectors
       ipv4addr:  100.1.1.2/30
 
 bgp:
   - peer: 100.1.1.1
-    group: flow-servers
+    group: netflow-collectors
     peeras: 10753
-    description: 10GE Flow Collector - Blah.lumen.com
-    hash: mypassword
+    description: Netflow Collector - Blah.lumen.com

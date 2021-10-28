@@ -1,0 +1,10 @@
+   
+ 
+/configure router interface "ae7.11" create
+/configure router interface "ae7.11" address 100.1.1.2/30
+/configure router interface "ae7.11" description "MGD NetFlow Collectors"
+/configure router interface "ae7.11" enable-ingress-stats
+/configure router interface "ae7.11" port lag-7:11
+/configure router interface "ae7.11" ingress filter ip 1
+/configure router interface "ae7.11" no shut
+exit all

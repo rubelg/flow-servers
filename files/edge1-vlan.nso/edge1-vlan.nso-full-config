@@ -1,6 +1,6 @@
-set interfaces xe-0/1/3 description "Planning Provided"
-set interfaces xe-0/1/3 unit 0 description "NetFlow Collectors"
-set interfaces xe-0/1/3 unit 0 family inet address 100.1.1.2/30
+set interfaces ae10 unit 12 description "MGD Attached Netflow Collectors"
+set interfaces ae10 unit 12 family inet address 100.1.1.2/30
+set interfaces ae10 unit 12 vlan-id 12
       
 set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.14.0/23 orlonger
 set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.30.0/23 orlonger
@@ -20,5 +20,5 @@ set protocols bgp group netflow-collectors import customer
 set protocols bgp group netflow-collectors import bb2
 set protocols bgp group netflow-collectors export send-default
 set protocols bgp group netflow-collectors export none
-set protocols bgp group netflow-collectors neighbor 100.1.1.1 description "Netflow Collector - Blah.lumen.com"
+set protocols bgp group netflow-collectors neighbor 100.1.1.1 description "Netlow Collector - Blah.lumen.com"
  

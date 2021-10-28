@@ -1,17 +1,12 @@
    
  
-/configure port 3/1/1 shutdown
-/configure port 3/1/1 description "Planning Provided"
-/configure port 3/1/1 ethernet mode access
-/configure port 3/1/1 ethernet encap-type null
-/configure port 3/1/1 no shutdown
- 
-/configure service ies 3356 interface "xe-3/1/1" create
-/configure service ies 3356 interface "xe-3/1/1" address 100.1.1.2/30
-/configure service ies 3356 interface "xe-3/1/1" description "NetFlow Collectors"
-/configure service ies 3356 interface "xe-3/1/1" enable-ingress-stats
-/configure service ies 3356 interface "xe-3/1/1" sap 3/1/1:0 create
-/configure service ies 3356 interface "xe-3/1/1" no shutdown
+/configure router interface "ae7.11" create
+/configure router interface "ae7.11" address 100.1.1.2/30
+/configure router interface "ae7.11" description "MGD NetFlow Collectors"
+/configure router interface "ae7.11" enable-ingress-stats
+/configure router interface "ae7.11" port lag-7:11
+/configure router interface "ae7.11" ingress filter ip 1
+/configure router interface "ae7.11" no shut
 exit all
 /configure router policy-options begin
 /configure router policy-options prefix-list "peer-netflow" prefix 4.68.14.0/23 longer
@@ -37,6 +32,6 @@ exit all
 /configure router bgp group "netflow-collectors" family ipv4
 /configure router bgp group "netflow-collectors" import "peer-netflow" "customer"
 /configure router bgp group "netflow-collectors" export "send-default" "none"
-/configure router bgp group "netflow-collectors" neighbor 100.1.1.1 description "NetFlow Collector - hostname"
+/configure router bgp group "netflow-collectors" neighbor 100.1.1.1 description "Netflow Collector - blah.lumen.com"
  
 exit all

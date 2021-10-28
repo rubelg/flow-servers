@@ -9,19 +9,19 @@
 
 
 /configure router policy-options begin
-/configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.14.0/23 longer
-/configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.30.0/23 longer
-/configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.32.0/22 longer
-/configure router policy-options prefix-list "bgp-{{ b.group }}" prefix 4.68.36.0/24 longer
+/configure router policy-options prefix-list "peer-netflow" prefix 4.68.14.0/23 longer
+/configure router policy-options prefix-list "peer-netflow" prefix 4.68.30.0/23 longer
+/configure router policy-options prefix-list "peer-netflow" prefix 4.68.32.0/22 longer
+/configure router policy-options prefix-list "peer-netflow" prefix 4.68.36.0/24 longer
  
-/configure router policy-options policy-statement "bgp-{{ b.group }}"
-/configure router policy-options policy-statement "bgp-{{ b.group }}" description "Directly Attached Flow Server Import Policy"
-/configure router policy-options policy-statement "bgp-{{ b.group }}" entry 5 from prefix-list "bgp-{{ b.group }}"
-/configure router policy-options policy-statement "bgp-{{ b.group }}" entry 5 action next-policy
-/configure router policy-options policy-statement "bgp-{{ b.group }}" entry 15 action drop
+/configure router policy-options policy-statement "peer-netflow"
+/configure router policy-options policy-statement "peer-netflow" description "Neflow Collector Import Policy"
+/configure router policy-options policy-statement "peer-netflow" entry 5 from prefix-list "10ge-flow-collectors"
+/configure router policy-options policy-statement "peer-netflow" entry 5 action next-policy
+/configure router policy-options policy-statement "peer-netflow" entry 15 action drop
 
 /configure router policy-options commit
-
+exit all
    {% endfor %}
  {% endif %}
 {% endif %}
@@ -29,13 +29,12 @@
 {% if os == "junos" %}
   {% if bgp is defined %}
     {% for b in bgp %}
-set policy-options prefix-list bgp-{{ b.group }} 4.68.14.0/23
-set policy-options prefix-list bgp-{{ b.group }} 4.68.30.0/23
-set policy-options prefix-list bgp-{{ b.group }} 4.68.32.0/22
-set policy-options prefix-list bgp-{{ b.group }} 4.68.36.0/24
-set policy-options policy-statement bgp-{{ b.group }} term flow-servers from prefix-list bgp-{{ b.group }}
-set policy-options policy-statement bgp-{{ b.group }} term flow-servers then next policy
-set policy-options policy-statement bgp-{{ b.group }} term reject then reject
+set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.14.0/23 orlonger
+set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.30.0/23 orlonger
+set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.32.0/22 orlonger
+set policy-options policy-statement peer-netflow term route-set1 from route-filter 4.68.36.0/24 orlonger
+set policy-options policy-statement peer-netflow term route-set1 then next policy
+set policy-options policy-statement peer-netflow term reject then reject
  
    {% endfor %}
  {% endif %}
